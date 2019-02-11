@@ -4,4 +4,4 @@ An [R Shiny app](https://simranvatsa.shinyapps.io/netflix-and-charts/) that uses
 
 To run the app in RStudio, place the data file in a folder named "Data" in your working directory (the folder in which you place app.R).
 
-The static plot in the repo, which I write a bit about [on my blog](https://simranvatsa.github.io/post/netflix-history-shiny/) is what sparked the idea for the app.
+The static plot in the repo, which I write a bit about [on my blog](https://simranvatsa.github.io/post/netflix-history-shiny/), is what sparked the idea for the app.
