@@ -116,7 +116,7 @@ server <- function(input, output) {
                tick_padding = 15) %>% 
       add_axis("y", title = "", offset = 5) %>% 
       set_options(height = 500, width = 850) %>% 
-      scale_ordinal("fill", range = distinctColorPalette(k = 100, altCol = FALSE, runTsne = FALSE)) %>% 
+      scale_ordinal("fill", range = distinctColorPalette(k = 70, altCol = FALSE, runTsne = FALSE)) %>% 
       add_legend("fill", title = "Program title",
                  properties = legend_props(title = list(fontSize = 14),
                    labels = list(fontSize = 12)))
