@@ -10,7 +10,8 @@ ui <- fluidPage(
   p("Take off your blindfold for a look at your Netflix viewing activity that's interactive, like Black Mirror: Bandersnatch.
     I've tidied up this data so much that even Marie Kondo would approve!"),
   tags$a(href = "https://www.netflix.com/ViewingActivity", "You can download your Netflix viewing history here."),
-  p("A caveat: While the dataset theoretically contains all titles you've watched on Netflix, it does not keep records of repeat viewings. So, for example, when I rewatched \"To All The Boys I've Loved Before\" in December 2018, my original August viewing was erased from the dataset. Also, the chart filters out any TV show of which only one episode has been watched."),
+  p("A caveat: While the dataset theoretically contains all titles you've watched on Netflix, it does not keep records of repeat viewings. So, for example, when I rewatched \"To All The Boys I've Loved Before\" in December 2018, my original August viewing was erased from the dataset."),
+  p("Also, the chart filters out any TV show of which only one episode has been watched."),
   p("The chart you see prior to uploading your own data displays my Netflix data for a year, based on a file containing my viewing history until Feb 10, 2019. You can play around with it if you don't want to upload your data/don't use Netflix!"),
   br(),
   
@@ -84,21 +85,32 @@ server <- function(input, output) {
       filter(`Show Title` %in% to_include$`Show Title`) %>% 
       mutate(Position = rev(Position)) 
     
-    netflix
-  })
-  
-  vis1 <- reactive({
-    
-    plot_data <- modified_data() %>% 
+    netflix <- netflix %>% 
       filter(Media_Type %in% input$media_type) %>% 
       filter(Date >= input$time_begin, Date <= input$time_end)
     
-    plot_data$Month_Year <- droplevels(plot_data$Month_Year)
+    netflix$Month_Year <- droplevels(netflix$Month_Year)
     
+    netflix
+  })
+  
+  tooltip_values <- function(df) {
+    
+    modified_data <- isolate(modified_data())
+    modified_data <- modified_data[modified_data$Title == df$Title, ]
+    paste0(modified_data$Title, "<br>", 
+           "Date watched: ", modified_data$Date)
+    
+  }
+  
+  vis1 <- reactive({
+    
+    plot_data <- modified_data() 
+
     plot_data %>% 
       ggvis(x = ~Month_Year, y = ~Position, fill = ~`Show Title`, key := ~Title) %>% 
       layer_points(size := 40) %>% 
-      add_tooltip(function(df) df$Title) %>% 
+      add_tooltip(tooltip_values, "hover") %>% 
       add_axis("x", title = "", properties = 
                  axis_props(labels = list(angle = -45, fontSize = 10)), 
                tick_padding = 15) %>% 
